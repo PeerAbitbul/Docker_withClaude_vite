@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  app:
+    build: ./Docker_withClaude_vite
+    ports:
+      - "5173:5173"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16
+    env_file: .env
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+     
+    ports:
+      - "5432:5432"
+    volumes:
+        - pg_data_16:/var/lib/postgresql/data
+    
+
+
+volumes:
+  pg_data_16:
+
+
+
+
+      
